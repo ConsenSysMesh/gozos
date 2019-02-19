@@ -19,6 +19,6 @@ func main() {
 		InitVersion("0.8.7"),
 	)
 	if err != nil {
-		log.Fatalf("initcmd error : %s", err.Error())
+		log.Fatalf(err.Error())
 	}
 }
