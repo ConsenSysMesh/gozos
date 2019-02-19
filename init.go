@@ -3,17 +3,23 @@ package main
 
 var(
 	DefaultInitOpts = InitOptions{
-
+		Args: []string{
+			initCmd,
+		},
 	}
 )
 
 type InitOptions struct {
-
+	Args []string
 }
 
 type InitOption func(*InitOptions)
 
-
+func InitVersion(version string) InitOption{
+	return func(options *InitOptions) {
+		options.Args = append(options.Args, version)
+	}
+}
 
 type cmd struct {
 	projectName string
@@ -23,6 +29,7 @@ type cmd struct {
 
 func NewInitCmd(projectName string, setters ...InitOption) Cmd{
 	opts := &DefaultInitOpts
+	opts.Args = append(opts.Args, projectName)
 	for _, setter := range setters{
 		setter(opts)
 	}
@@ -32,7 +39,14 @@ func NewInitCmd(projectName string, setters ...InitOption) Cmd{
 	}
 }
 
-func (cmd cmd) Exec() error {
-	mkdir(cmd.projectName, true)
-	return nil
+func (cmd cmd) Exec() (err error) {
+	err = mkdir(cmd.projectName)
+	if err != nil{
+		return
+	}
+	err = call(cmd.projectName, zos, cmd.opts.Args...)
+	if err != nil{
+		return
+	}
+	return
 }

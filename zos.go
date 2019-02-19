@@ -1,20 +1,22 @@
 package main
 
+
+
 type Zos interface {
 	Init(projectName string, opts ...InitOption) error
 }
 
-type zos struct {
+type zosWrapper struct {
 
 }
 
 func NewZos() Zos{
-	return &zos{
+	return &zosWrapper{
 
 	}
 }
 
-func (zos zos) Init(projectName string, opts ...InitOption) error {
+func (zos zosWrapper) Init(projectName string, opts ...InitOption) error {
 	return NewInitCmd(projectName, opts...).Exec()
 }
 
